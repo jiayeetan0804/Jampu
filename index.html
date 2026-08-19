@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>JAMPU</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     START SCREEN
+===================================================== -->
+
+<div
+    id="startScreen"
+    class="screen"
+>
+
+    <div class="menu-card">
+
+        <div class="logo">
+            JAMPU
+        </div>
+
+        <div class="logo-subtitle">
+            STICKMAN ADVENTURE
+        </div>
+
+        <div class="menu-character">
+            🏃
+        </div>
+
+        <p class="menu-description">
+            Run. Jump. Collect. Survive.
+        </p>
+
+        <button
+            id="startButton"
+            class="main-button"
+        >
+            ▶ PLAY
+        </button>
+
+        <div class="controls">
+
+            <div>
+                <span>← →</span>
+                Move
+            </div>
+
+            <div>
+                <span>SPACE</span>
+                Jump
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     GAME SCREEN
+===================================================== -->
+
+<div
+    id="gameScreen"
+    class="game-screen hidden"
+>
+
+
+    <!-- =================================================
+         HUD
+    ================================================= -->
+
+    <div class="hud">
+
+        <div class="hud-left">
+
+            <div class="hud-item">
+
+                <span class="hud-label">
+                    SCORE
+                </span>
+
+                <span id="scoreDisplay">
+                    000000
+                </span>
+
+            </div>
+
+
+            <div class="hud-item">
+
+                <span class="hud-label">
+                    COINS
+                </span>
+
+                <span>
+                    🪙
+                    <span id="coinDisplay">
+                        0
+                    </span>
+                </span>
+
+            </div>
+
+
+            <div class="hud-item">
+
+                <span class="hud-label">
+                    LEVEL
+                </span>
+
+                <span id="levelDisplay">
+                    1
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="hud-right">
+
+            <div
+                id="livesDisplay"
+                class="lives"
+            >
+                ❤️ ❤️ ❤️
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CANVAS
+    ================================================= -->
+
+    <canvas
+        id="gameCanvas"
+        width="1000"
+        height="600"
+    ></canvas>
+
+
+    <div class="game-tip">
+        ← → Move &nbsp;&nbsp; SPACE Jump
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     LEVEL INTRO
+===================================================== -->
+
+<div
+    id="levelIntroScreen"
+    class="overlay hidden"
+>
+
+    <div class="level-intro">
+
+        <div class="intro-small">
+            GET READY
+        </div>
+
+        <div
+            id="introLevel"
+            class="intro-level"
+        >
+            LEVEL 1
+        </div>
+
+        <div
+            id="introSubtitle"
+            class="intro-subtitle"
+        >
+            READY?
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     GAME OVER
+===================================================== -->
+
+<div
+    id="gameOverScreen"
+    class="overlay hidden"
+>
+
+    <div class="popup-card game-over-card">
+
+        <div class="popup-icon">
+            💀
+        </div>
+
+        <h1>
+            GAME OVER
+        </h1>
+
+        <p class="popup-score">
+            SCORE:
+            <span id="finalScore">
+                000000
+            </span>
+        </p>
+
+
+        <!-- WATCH AD -->
+
+        <button
+            id="reviveButton"
+            class="ad-button"
+        >
+            📺 WATCH AD TO REVIVE
+        </button>
+
+
+        <div
+            id="reviveInfo"
+            class="revive-info"
+        >
+            Watch a short ad to get
+            <strong>1 ❤️</strong>
+            and continue.
+        </div>
+
+
+        <!-- TRY AGAIN -->
+
+        <button
+            id="restartButton"
+            class="main-button small-button"
+        >
+            ↻ TRY AGAIN
+        </button>
+
+
+        <!-- MAIN MENU -->
+
+        <button
+            id="mainMenuButton"
+            class="secondary-button"
+        >
+            BACK TO MAIN MENU
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FAKE AD SCREEN
+===================================================== -->
+
+<div
+    id="adScreen"
+    class="overlay hidden"
+>
+
+    <div class="ad-card">
+
+        <div class="ad-label">
+            ADVERTISEMENT
+        </div>
+
+        <div class="ad-icon">
+            📺
+        </div>
+
+        <h2>
+            Reward Ad
+        </h2>
+
+        <p>
+            Your reward will be ready soon.
+        </p>
+
+        <div
+            id="adCountdown"
+            class="ad-countdown"
+        >
+            5
+        </div>
+
+        <div class="ad-loading">
+
+            <div class="loading-bar"></div>
+
+        </div>
+
+        <p class="ad-small">
+            Please wait...
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REVIVE SUCCESS
+===================================================== -->
+
+<div
+    id="reviveScreen"
+    class="overlay hidden"
+>
+
+    <div class="revive-card">
+
+        <div class="revive-icon">
+            ❤️
+        </div>
+
+        <h1>
+            REVIVED!
+        </h1>
+
+        <p>
+            You have been given
+            <strong>1 LIFE</strong>.
+        </p>
+
+        <div class="revive-glow">
+            GET READY!
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     LEVEL COMPLETE
+===================================================== -->
+
+<div
+    id="levelCompleteScreen"
+    class="overlay hidden"
+>
+
+    <div class="popup-card complete-card">
+
+        <div class="popup-icon">
+            🏆
+        </div>
+
+        <h1>
+            LEVEL COMPLETE!
+        </h1>
+
+        <p class="popup-score">
+            SCORE:
+            <span id="levelScore">
+                000000
+            </span>
+        </p>
+
+
+        <button
+            id="nextLevelButton"
+            class="main-button"
+        >
+            NEXT LEVEL →
+        </button>
+
+
+        <button
+            id="completeMenuButton"
+            class="secondary-button"
+        >
+            BACK TO MAIN MENU
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="game.js"></script>
+
+</body>
+
+</html>

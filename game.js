@@ -1,0 +1,3065 @@
+// ======================================================
+// JAMPU
+// STICKMAN ADVENTURE
+// ======================================================
+
+
+// ======================================================
+// CANVAS
+// ======================================================
+
+const canvas =
+    document.getElementById("gameCanvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+
+// ======================================================
+// GAME SETTINGS
+// ======================================================
+
+const gravity = 0.6;
+
+const playerSpeed = 5;
+
+const jumpPower = 13;
+
+
+// ======================================================
+// GAME VARIABLES
+// ======================================================
+
+let currentLevel = 1;
+
+let score = 0;
+
+let coinCount = 0;
+
+let lives = 3;
+
+let gameTime = 0;
+
+let gameRunning = false;
+
+let paused = false;
+
+let gameOver = false;
+
+let levelComplete = false;
+
+let gameWon = false;
+
+
+// ======================================================
+// REVIVE SYSTEM
+// ======================================================
+
+// 每一次完整游戏只能使用一次广告复活
+
+let reviveUsed = false;
+
+let adPlaying = false;
+
+
+// ======================================================
+// LEVEL DATA
+// ======================================================
+
+const levels = {
+
+
+// ======================================================
+// LEVEL 1
+// ======================================================
+
+1: {
+
+    worldWidth: 5000,
+
+    theme: "day",
+
+    platforms: [
+
+        { x: 0, y: 540, width: 1200, height: 60 },
+
+        { x: 250, y: 450, width: 180, height: 25 },
+
+        { x: 520, y: 380, width: 180, height: 25 },
+
+        { x: 800, y: 450, width: 180, height: 25 },
+
+        { x: 1100, y: 500, width: 250, height: 40 },
+
+        { x: 1450, y: 420, width: 180, height: 25 },
+
+        { x: 1750, y: 340, width: 180, height: 25 },
+
+        { x: 2050, y: 470, width: 220, height: 25 },
+
+        { x: 2400, y: 390, width: 180, height: 25 },
+
+        { x: 2700, y: 310, width: 180, height: 25 },
+
+        { x: 3050, y: 500, width: 250, height: 40 },
+
+        { x: 3400, y: 420, width: 180, height: 25 },
+
+        { x: 3700, y: 350, width: 200, height: 25 },
+
+        { x: 4050, y: 470, width: 220, height: 25 },
+
+        { x: 4400, y: 380, width: 200, height: 25 },
+
+        { x: 4750, y: 500, width: 250, height: 40 }
+
+    ],
+
+
+    coins: [
+
+        { x: 320, y: 410 },
+
+        { x: 590, y: 340 },
+
+        { x: 870, y: 410 },
+
+        { x: 1200, y: 460 },
+
+        { x: 1510, y: 380 },
+
+        { x: 1810, y: 300 },
+
+        { x: 2150, y: 430 },
+
+        { x: 2460, y: 350 },
+
+        { x: 2760, y: 270 },
+
+        { x: 3170, y: 460 },
+
+        { x: 3470, y: 380 },
+
+        { x: 3780, y: 310 },
+
+        { x: 4170, y: 430 },
+
+        { x: 4500, y: 340 }
+
+    ],
+
+
+    enemies: [
+
+        {
+            x: 700,
+            y: 340,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 520,
+            endX: 660
+        },
+
+        {
+            x: 1250,
+            y: 460,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 1100,
+            endX: 1310
+        },
+
+        {
+            x: 1800,
+            y: 300,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 1750,
+            endX: 1890
+        },
+
+        {
+            x: 2450,
+            y: 350,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 2400,
+            endX: 2540
+        },
+
+        {
+            x: 3500,
+            y: 380,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 3400,
+            endX: 3540
+        },
+
+        {
+            x: 4100,
+            y: 430,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 4050,
+            endX: 4230
+        }
+
+    ],
+
+
+    goal: {
+
+        x: 4900,
+
+        y: 400,
+
+        width: 40,
+
+        height: 100
+    }
+
+},
+
+
+// ======================================================
+// LEVEL 2
+// ======================================================
+
+2: {
+
+    worldWidth: 6000,
+
+    theme: "night",
+
+    platforms: [
+
+        { x: 0, y: 540, width: 600, height: 60 },
+
+        { x: 700, y: 450, width: 150, height: 25 },
+
+        { x: 950, y: 360, width: 150, height: 25 },
+
+        { x: 1200, y: 450, width: 130, height: 25 },
+
+        { x: 1450, y: 330, width: 150, height: 25 },
+
+        { x: 1700, y: 250, width: 150, height: 25 },
+
+        { x: 1950, y: 380, width: 160, height: 25 },
+
+        { x: 2250, y: 470, width: 150, height: 25 },
+
+        { x: 2500, y: 350, width: 140, height: 25 },
+
+        { x: 2750, y: 270, width: 150, height: 25 },
+
+        { x: 3050, y: 420, width: 140, height: 25 },
+
+        { x: 3300, y: 320, width: 150, height: 25 },
+
+        { x: 3600, y: 240, width: 150, height: 25 },
+
+        { x: 3900, y: 370, width: 160, height: 25 },
+
+        { x: 4200, y: 470, width: 150, height: 25 },
+
+        { x: 4450, y: 350, width: 150, height: 25 },
+
+        { x: 4700, y: 270, width: 150, height: 25 },
+
+        { x: 5000, y: 400, width: 180, height: 25 },
+
+        { x: 5300, y: 500, width: 700, height: 40 }
+
+    ],
+
+
+    coins: [
+
+        { x: 760, y: 410 },
+
+        { x: 1010, y: 320 },
+
+        { x: 1260, y: 410 },
+
+        { x: 1510, y: 290 },
+
+        { x: 1760, y: 210 },
+
+        { x: 2010, y: 340 },
+
+        { x: 2310, y: 430 },
+
+        { x: 2560, y: 310 },
+
+        { x: 2810, y: 230 },
+
+        { x: 3110, y: 380 },
+
+        { x: 3360, y: 280 },
+
+        { x: 3660, y: 200 },
+
+        { x: 3960, y: 330 },
+
+        { x: 4260, y: 430 },
+
+        { x: 4510, y: 310 },
+
+        { x: 4760, y: 230 },
+
+        { x: 5070, y: 360 }
+
+    ],
+
+
+    enemies: [
+
+        {
+            x: 450,
+            y: 500,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 300,
+            endX: 540
+        },
+
+        {
+            x: 730,
+            y: 410,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 700,
+            endX: 810
+        },
+
+        {
+            x: 980,
+            y: 320,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 950,
+            endX: 1060
+        },
+
+        {
+            x: 1460,
+            y: 290,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 1450,
+            endX: 1560
+        },
+
+        {
+            x: 1730,
+            y: 210,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 1700,
+            endX: 1810
+        },
+
+        {
+            x: 2280,
+            y: 430,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 2250,
+            endX: 2360
+        },
+
+        {
+            x: 2780,
+            y: 230,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 2750,
+            endX: 2860
+        },
+
+        {
+            x: 3330,
+            y: 280,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 3300,
+            endX: 3410
+        },
+
+        {
+            x: 3630,
+            y: 200,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 3600,
+            endX: 3710
+        },
+
+        {
+            x: 4230,
+            y: 430,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 4200,
+            endX: 4310
+        },
+
+        {
+            x: 4730,
+            y: 230,
+            width: 40,
+            height: 40,
+            velocityX: 2,
+            startX: 4700,
+            endX: 4810
+        }
+
+    ],
+
+
+    goal: {
+
+        x: 5500,
+
+        y: 400,
+
+        width: 40,
+
+        height: 100
+    }
+
+}
+
+};
+
+
+// ======================================================
+// CURRENT LEVEL OBJECTS
+// ======================================================
+
+let platforms = [];
+
+let coins = [];
+
+let enemies = [];
+
+let goal = null;
+
+let worldWidth = 5000;
+
+
+// ======================================================
+// PLAYER
+// ======================================================
+
+const player = {
+
+    x: 100,
+
+    y: 400,
+
+    width: 40,
+
+    height: 60,
+
+    velocityX: 0,
+
+    velocityY: 0,
+
+    onGround: false,
+
+    direction: 1
+
+};
+
+
+// ======================================================
+// CAMERA
+// ======================================================
+
+const camera = {
+
+    x: 0,
+
+    width: canvas.width,
+
+    followOffset: 400
+
+};
+
+
+// ======================================================
+// KEYS
+// ======================================================
+
+const keys = {};
+
+
+// ======================================================
+// DOM
+// ======================================================
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const gameScreen =
+    document.getElementById("gameScreen");
+
+const gameOverScreen =
+    document.getElementById("gameOverScreen");
+
+const levelCompleteScreen =
+    document.getElementById("levelCompleteScreen");
+
+const adScreen =
+    document.getElementById("adScreen");
+
+const reviveScreen =
+    document.getElementById("reviveScreen");
+
+const levelIntroScreen =
+    document.getElementById("levelIntroScreen");
+
+
+const startButton =
+    document.getElementById("startButton");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const mainMenuButton =
+    document.getElementById("mainMenuButton");
+
+const nextLevelButton =
+    document.getElementById("nextLevelButton");
+
+const completeMenuButton =
+    document.getElementById("completeMenuButton");
+
+const reviveButton =
+    document.getElementById("reviveButton");
+
+
+const scoreDisplay =
+    document.getElementById("scoreDisplay");
+
+const coinDisplay =
+    document.getElementById("coinDisplay");
+
+const levelDisplay =
+    document.getElementById("levelDisplay");
+
+const livesDisplay =
+    document.getElementById("livesDisplay");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const levelScore =
+    document.getElementById("levelScore");
+
+const adCountdown =
+    document.getElementById("adCountdown");
+
+
+// ======================================================
+// KEYBOARD
+// ======================================================
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        keys[event.code] = true;
+
+
+        if (
+            event.code === "Space" ||
+            event.code === "ArrowUp" ||
+            event.code === "ArrowDown" ||
+            event.code === "ArrowLeft" ||
+            event.code === "ArrowRight"
+        ) {
+
+            event.preventDefault();
+        }
+
+
+        if (
+            event.code === "Escape" &&
+            gameRunning &&
+            !gameOver &&
+            !levelComplete
+        ) {
+
+            paused = !paused;
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keyup",
+    function(event) {
+
+        keys[event.code] = false;
+
+    }
+);
+
+
+// ======================================================
+// LOAD LEVEL
+// ======================================================
+
+function loadLevel(levelNumber) {
+
+    const level =
+        levels[levelNumber];
+
+
+    if (!level) {
+        return;
+    }
+
+
+    worldWidth =
+        level.worldWidth;
+
+
+    platforms =
+        level.platforms.map(
+            platform => ({
+                ...platform
+            })
+        );
+
+
+    coins =
+        level.coins.map(
+            coin => ({
+
+                ...coin,
+
+                radius: 13,
+
+                collected: false
+
+            })
+        );
+
+
+    enemies =
+        level.enemies.map(
+            enemy => ({
+
+                ...enemy,
+
+                alive: true
+
+            })
+        );
+
+
+    goal = {
+
+        ...level.goal,
+
+        reached: false
+
+    };
+
+
+    resetPlayer();
+
+    camera.x = 0;
+
+    updateUI();
+
+    drawFrame();
+}
+
+
+// ======================================================
+// RESET PLAYER
+// ======================================================
+
+function resetPlayer() {
+
+    player.x = 100;
+
+    player.y = 400;
+
+    player.velocityX = 0;
+
+    player.velocityY = 0;
+
+    player.onGround = false;
+
+    player.direction = 1;
+
+
+    for (
+        const key in keys
+    ) {
+
+        keys[key] = false;
+
+    }
+}
+
+
+// ======================================================
+// UI
+// ======================================================
+
+function updateUI() {
+
+    scoreDisplay.textContent =
+        String(score).padStart(6, "0");
+
+
+    coinDisplay.textContent =
+        coinCount;
+
+
+    levelDisplay.textContent =
+        currentLevel;
+
+
+    if (lives === 3) {
+
+        livesDisplay.textContent =
+            "❤️ ❤️ ❤️";
+
+    }
+
+    else if (lives === 2) {
+
+        livesDisplay.textContent =
+            "❤️ ❤️";
+
+    }
+
+    else if (lives === 1) {
+
+        livesDisplay.textContent =
+            "❤️";
+
+    }
+
+    else {
+
+        livesDisplay.textContent =
+            "💀";
+
+    }
+}
+
+
+// ======================================================
+// START GAME
+// ======================================================
+
+function startGame() {
+
+    score = 0;
+
+    coinCount = 0;
+
+    lives = 3;
+
+    currentLevel = 1;
+
+    gameTime = 0;
+
+    gameRunning = true;
+
+    paused = false;
+
+    gameOver = false;
+
+    levelComplete = false;
+
+    gameWon = false;
+
+    reviveUsed = false;
+
+    adPlaying = false;
+
+
+    loadLevel(1);
+
+
+    startScreen.classList.add("hidden");
+
+    gameScreen.classList.remove("hidden");
+
+    gameOverScreen.classList.add("hidden");
+
+    levelCompleteScreen.classList.add("hidden");
+
+    adScreen.classList.add("hidden");
+
+    reviveScreen.classList.add("hidden");
+
+
+    updateUI();
+
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+// ======================================================
+// RESTART CURRENT LEVEL
+// ======================================================
+
+function restartGame() {
+
+    gameTime = 0;
+
+    gameRunning = true;
+
+    paused = false;
+
+    gameOver = false;
+
+    levelComplete = false;
+
+    gameWon = false;
+
+    adPlaying = false;
+
+
+    // Try Again = completely new attempt
+
+    lives = 3;
+
+    reviveUsed = false;
+
+
+    loadLevel(currentLevel);
+
+
+    gameOverScreen.classList.add("hidden");
+
+    levelCompleteScreen.classList.add("hidden");
+
+    adScreen.classList.add("hidden");
+
+    reviveScreen.classList.add("hidden");
+
+
+    gameScreen.classList.remove("hidden");
+
+
+    updateUI();
+
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+// ======================================================
+// NEXT LEVEL
+// ======================================================
+
+function nextLevel() {
+
+    if (
+        currentLevel >=
+        Object.keys(levels).length
+    ) {
+
+        return;
+    }
+
+
+    currentLevel++;
+
+
+    gameTime = 0;
+
+    gameRunning = false;
+
+    paused = false;
+
+    gameOver = false;
+
+    levelComplete = false;
+
+    gameWon = false;
+
+    reviveUsed = false;
+
+
+    levelCompleteScreen.classList.add("hidden");
+
+    gameScreen.classList.remove("hidden");
+
+
+    loadLevel(currentLevel);
+
+
+    showLevelIntro(
+        currentLevel,
+        function() {
+
+            gameRunning = true;
+
+            requestAnimationFrame(gameLoop);
+
+        }
+    );
+}
+
+
+// ======================================================
+// MAIN MENU
+// ======================================================
+
+function goToMainMenu() {
+
+    gameRunning = false;
+
+    paused = false;
+
+    gameOver = false;
+
+    levelComplete = false;
+
+    gameWon = false;
+
+    adPlaying = false;
+
+
+    currentLevel = 1;
+
+    score = 0;
+
+    coinCount = 0;
+
+    lives = 3;
+
+    gameTime = 0;
+
+    reviveUsed = false;
+
+
+    loadLevel(1);
+
+
+    gameScreen.classList.add("hidden");
+
+    gameOverScreen.classList.add("hidden");
+
+    levelCompleteScreen.classList.add("hidden");
+
+    adScreen.classList.add("hidden");
+
+    reviveScreen.classList.add("hidden");
+
+    levelIntroScreen.classList.add("hidden");
+
+
+    startScreen.classList.remove("hidden");
+
+
+    updateUI();
+
+    drawFrame();
+}
+
+
+// ======================================================
+// BUTTONS
+// ======================================================
+
+startButton.addEventListener(
+    "click",
+    function() {
+
+        startButton.disabled = true;
+
+        startScreen.classList.add("hidden");
+
+        gameScreen.classList.remove("hidden");
+
+
+        showLevelIntro(
+            1,
+            function() {
+
+                startGame();
+
+                startButton.disabled = false;
+
+            }
+        );
+
+    }
+);
+
+
+restartButton.addEventListener(
+    "click",
+    restartGame
+);
+
+
+mainMenuButton.addEventListener(
+    "click",
+    goToMainMenu
+);
+
+
+completeMenuButton.addEventListener(
+    "click",
+    goToMainMenu
+);
+
+
+nextLevelButton.addEventListener(
+    "click",
+    nextLevel
+);
+
+
+// ======================================================
+// WATCH AD BUTTON
+// ======================================================
+
+reviveButton.addEventListener(
+    "click",
+    function() {
+
+        startRewardAd();
+
+    }
+);
+
+
+// ======================================================
+// PLAYER UPDATE
+// ======================================================
+
+function updatePlayer() {
+
+    player.velocityX = 0;
+
+
+    if (
+        keys["ArrowLeft"] ||
+        keys["KeyA"]
+    ) {
+
+        player.velocityX =
+            -playerSpeed;
+
+        player.direction = -1;
+    }
+
+
+    if (
+        keys["ArrowRight"] ||
+        keys["KeyD"]
+    ) {
+
+        player.velocityX =
+            playerSpeed;
+
+        player.direction = 1;
+    }
+
+
+    player.x +=
+        player.velocityX;
+
+
+    if (player.x < 0) {
+
+        player.x = 0;
+    }
+
+
+    if (
+        player.x +
+        player.width >
+        worldWidth
+    ) {
+
+        player.x =
+            worldWidth -
+            player.width;
+    }
+
+
+    const previousY =
+        player.y;
+
+
+    player.velocityY +=
+        gravity;
+
+
+    player.y +=
+        player.velocityY;
+
+
+    player.onGround = false;
+
+
+    // ==================================================
+    // PLATFORM COLLISION
+    // ==================================================
+
+    for (
+        const platform of platforms
+    ) {
+
+        const playerLeft =
+            player.x;
+
+        const playerRight =
+            player.x +
+            player.width;
+
+        const playerTop =
+            player.y;
+
+        const playerBottom =
+            player.y +
+            player.height;
+
+
+        const previousTop =
+            previousY;
+
+        const previousBottom =
+            previousY +
+            player.height;
+
+
+        const platformLeft =
+            platform.x;
+
+        const platformRight =
+            platform.x +
+            platform.width;
+
+        const platformTop =
+            platform.y;
+
+        const platformBottom =
+            platform.y +
+            platform.height;
+
+
+        const horizontal =
+            playerRight >
+            platformLeft &&
+            playerLeft <
+            platformRight;
+
+
+        if (!horizontal) {
+
+            continue;
+        }
+
+
+        // LAND
+
+        if (
+            player.velocityY >= 0 &&
+            previousBottom <= platformTop &&
+            playerBottom >= platformTop
+        ) {
+
+            player.y =
+                platformTop -
+                player.height;
+
+            player.velocityY = 0;
+
+            player.onGround = true;
+
+            continue;
+        }
+
+
+        // HIT FROM BELOW
+
+        if (
+            player.velocityY < 0 &&
+            previousTop >= platformBottom &&
+            playerTop <= platformBottom
+        ) {
+
+            player.y =
+                platformBottom;
+
+            player.velocityY = 0;
+        }
+    }
+
+
+    // ==================================================
+    // JUMP
+    // ==================================================
+
+    if (
+        (
+            keys["Space"] ||
+            keys["ArrowUp"] ||
+            keys["KeyW"]
+        ) &&
+        player.onGround
+    ) {
+
+        player.velocityY =
+            -jumpPower;
+
+        player.onGround = false;
+    }
+
+
+    // ==================================================
+    // FALL
+    // ==================================================
+
+    if (
+        player.y >
+        canvas.height + 200
+    ) {
+
+        loseLife();
+    }
+}
+
+
+// ======================================================
+// ENEMIES
+// ======================================================
+
+function updateEnemies() {
+
+    for (
+        const enemy of enemies
+    ) {
+
+        if (!enemy.alive) {
+            continue;
+        }
+
+
+        enemy.x +=
+            enemy.velocityX;
+
+
+        if (
+            enemy.x <=
+            enemy.startX
+        ) {
+
+            enemy.x =
+                enemy.startX;
+
+            enemy.velocityX =
+                Math.abs(
+                    enemy.velocityX
+                );
+        }
+
+
+        if (
+            enemy.x +
+            enemy.width >=
+            enemy.endX
+        ) {
+
+            enemy.x =
+                enemy.endX -
+                enemy.width;
+
+            enemy.velocityX =
+                -Math.abs(
+                    enemy.velocityX
+                );
+        }
+    }
+}
+
+
+// ======================================================
+// ENEMY COLLISION
+// ======================================================
+
+function checkEnemyCollision() {
+
+    for (
+        const enemy of enemies
+    ) {
+
+        if (!enemy.alive) {
+            continue;
+        }
+
+
+        const collision =
+
+            player.x +
+            player.width >
+            enemy.x &&
+
+            player.x <
+            enemy.x +
+            enemy.width &&
+
+            player.y +
+            player.height >
+            enemy.y &&
+
+            player.y <
+            enemy.y +
+            enemy.height;
+
+
+        if (!collision) {
+            continue;
+        }
+
+
+        const previousBottom =
+            player.y +
+            player.height -
+            player.velocityY;
+
+
+        // JUMP ON ENEMY
+
+        if (
+            player.velocityY > 0 &&
+            previousBottom <= enemy.y
+        ) {
+
+            enemy.alive = false;
+
+            score += 200;
+
+            player.velocityY =
+                -jumpPower * 0.6;
+
+        }
+
+        else {
+
+            loseLife();
+
+        }
+    }
+}
+
+
+// ======================================================
+// COINS
+// ======================================================
+
+function checkCoinCollection() {
+
+    for (
+        const coin of coins
+    ) {
+
+        if (coin.collected) {
+            continue;
+        }
+
+
+        const centerX =
+            player.x +
+            player.width / 2;
+
+        const centerY =
+            player.y +
+            player.height / 2;
+
+
+        const dx =
+            centerX -
+            coin.x;
+
+        const dy =
+            centerY -
+            coin.y;
+
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+
+        if (
+            distance <
+            coin.radius + 25
+        ) {
+
+            coin.collected = true;
+
+            coinCount++;
+
+            score += 100;
+        }
+    }
+}
+
+
+// ======================================================
+// GOAL
+// ======================================================
+
+function checkGoal() {
+
+    if (goal.reached) {
+        return;
+    }
+
+
+    const collision =
+
+        player.x +
+        player.width >
+        goal.x &&
+
+        player.x <
+        goal.x +
+        goal.width &&
+
+        player.y +
+        player.height >
+        goal.y &&
+
+        player.y <
+        goal.y +
+        goal.height;
+
+
+    if (collision) {
+
+        goal.reached = true;
+
+        showLevelComplete();
+    }
+}
+
+
+// ======================================================
+// LEVEL COMPLETE
+// ======================================================
+
+function showLevelComplete() {
+
+    gameRunning = false;
+
+    levelComplete = true;
+
+
+    levelScore.textContent =
+        String(score).padStart(
+            6,
+            "0"
+        );
+
+
+    levelCompleteScreen.classList.remove(
+        "hidden"
+    );
+
+
+    if (
+        currentLevel >=
+        Object.keys(levels).length
+    ) {
+
+        gameWon = true;
+
+        nextLevelButton.style.display =
+            "none";
+
+    }
+
+    else {
+
+        gameWon = false;
+
+        nextLevelButton.style.display =
+            "block";
+    }
+}
+
+
+// ======================================================
+// LOSE LIFE
+// ======================================================
+
+function loseLife() {
+
+    if (
+        !gameRunning ||
+        gameOver ||
+        levelComplete ||
+        adPlaying
+    ) {
+
+        return;
+    }
+
+
+    lives--;
+
+
+    updateUI();
+
+
+    // ==================================================
+    // STILL HAS LIVES
+    // ==================================================
+
+    if (lives > 0) {
+
+        resetPlayer();
+
+        return;
+    }
+
+
+    // ==================================================
+    // GAME OVER
+    // ==================================================
+
+    lives = 0;
+
+    gameRunning = false;
+
+    gameOver = true;
+
+
+    finalScore.textContent =
+        String(score).padStart(
+            6,
+            "0"
+        );
+
+
+    gameOverScreen.classList.remove(
+        "hidden"
+    );
+
+
+    // ==================================================
+    // REVIVE BUTTON
+    // ==================================================
+
+    if (reviveUsed) {
+
+        reviveButton.style.display =
+            "none";
+
+    }
+
+    else {
+
+        reviveButton.style.display =
+            "block";
+    }
+}
+
+
+// ======================================================
+// WATCH AD / REVIVE
+// ======================================================
+
+function startRewardAd() {
+
+    if (
+        reviveUsed ||
+        adPlaying ||
+        !gameOver
+    ) {
+
+        return;
+    }
+
+
+    adPlaying = true;
+
+
+    gameOverScreen.classList.add(
+        "hidden"
+    );
+
+
+    adScreen.classList.remove(
+        "hidden"
+    );
+
+
+    let seconds = 5;
+
+
+    adCountdown.textContent =
+        seconds;
+
+
+    const timer =
+        setInterval(
+            function() {
+
+                seconds--;
+
+
+                adCountdown.textContent =
+                    seconds;
+
+
+                if (seconds <= 0) {
+
+                    clearInterval(timer);
+
+                    finishRewardAd();
+
+                }
+
+            },
+            1000
+        );
+}
+
+
+// ======================================================
+// FINISH AD
+// ======================================================
+
+function finishRewardAd() {
+
+    adPlaying = false;
+
+    reviveUsed = true;
+
+
+    adScreen.classList.add(
+        "hidden"
+    );
+
+
+    reviveScreen.classList.remove(
+        "hidden"
+    );
+
+
+    // Give player ONE life
+
+    lives = 1;
+
+    gameOver = false;
+
+    levelComplete = false;
+
+    paused = false;
+
+
+    updateUI();
+
+
+    // Reload current level
+
+    loadLevel(
+        currentLevel
+    );
+
+
+    setTimeout(
+        function() {
+
+            reviveScreen.classList.add(
+                "hidden"
+            );
+
+
+            gameRunning = true;
+
+
+            updateUI();
+
+
+            requestAnimationFrame(
+                gameLoop
+            );
+
+        },
+        1200
+    );
+}
+
+
+// ======================================================
+// CAMERA
+// ======================================================
+
+function updateCamera() {
+
+    camera.x =
+        player.x -
+        camera.followOffset;
+
+
+    if (camera.x < 0) {
+
+        camera.x = 0;
+    }
+
+
+    if (
+        camera.x +
+        camera.width >
+        worldWidth
+    ) {
+
+        camera.x =
+            worldWidth -
+            camera.width;
+    }
+}
+
+
+// ======================================================
+// BACKGROUND
+// ======================================================
+
+function drawBackground() {
+
+    const level =
+        levels[currentLevel];
+
+
+    // ==================================================
+    // DAY
+    // ==================================================
+
+    if (
+        level.theme === "day"
+    ) {
+
+        const gradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                0,
+                canvas.height
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "#4facfe"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "#d9f2ff"
+        );
+
+
+        ctx.fillStyle =
+            gradient;
+
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        drawDayMountains();
+
+
+        drawCloud(
+            300,
+            100,
+            1
+        );
+
+
+        drawCloud(
+            850,
+            140,
+            0.8
+        );
+
+
+        drawCloud(
+            1500,
+            90,
+            1.1
+        );
+
+
+        drawCloud(
+            2500,
+            130,
+            0.9
+        );
+
+    }
+
+
+    // ==================================================
+    // NIGHT
+    // ==================================================
+
+    else {
+
+        const gradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                0,
+                canvas.height
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "#0d1330"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "#26345f"
+        );
+
+
+        ctx.fillStyle =
+            gradient;
+
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        drawStars();
+
+        drawMoon();
+
+        drawNightMountains();
+    }
+}
+
+
+// ======================================================
+// DAY MOUNTAINS
+// ======================================================
+
+function drawDayMountains() {
+
+    const offset =
+        camera.x * 0.25;
+
+
+    ctx.fillStyle =
+        "#91c7a2";
+
+
+    for (
+        let x = -1000;
+        x < worldWidth;
+        x += 700
+    ) {
+
+        const screenX =
+            x - offset;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            screenX,
+            540
+        );
+
+        ctx.lineTo(
+            screenX + 300,
+            280
+        );
+
+        ctx.lineTo(
+            screenX + 600,
+            540
+        );
+
+        ctx.closePath();
+
+        ctx.fill();
+    }
+}
+
+
+// ======================================================
+// NIGHT MOUNTAINS
+// ======================================================
+
+function drawNightMountains() {
+
+    const offset =
+        camera.x * 0.2;
+
+
+    ctx.fillStyle =
+        "#151b39";
+
+
+    for (
+        let x = -1000;
+        x < worldWidth;
+        x += 700
+    ) {
+
+        const screenX =
+            x - offset;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            screenX,
+            540
+        );
+
+        ctx.lineTo(
+            screenX + 300,
+            300
+        );
+
+        ctx.lineTo(
+            screenX + 600,
+            540
+        );
+
+        ctx.closePath();
+
+        ctx.fill();
+    }
+}
+
+
+// ======================================================
+// STARS
+// ======================================================
+
+function drawStars() {
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    for (
+        let i = 0;
+        i < 100;
+        i++
+    ) {
+
+        const worldX =
+            i * 83;
+
+
+        const x =
+            worldX -
+            camera.x * 0.2;
+
+
+        const y =
+            35 +
+            (i * 47) % 230;
+
+
+        const size =
+            1 +
+            (i % 3);
+
+
+        ctx.globalAlpha =
+            0.5 +
+            (
+                Math.sin(
+                    gameTime * 0.03 + i
+                ) + 1
+            ) * 0.25;
+
+
+        ctx.fillRect(
+            x,
+            y,
+            size,
+            size
+        );
+    }
+
+
+    ctx.globalAlpha = 1;
+}
+
+
+// ======================================================
+// MOON
+// ======================================================
+
+function drawMoon() {
+
+    const x =
+        850 -
+        camera.x * 0.1;
+
+
+    const y = 100;
+
+
+    ctx.fillStyle =
+        "#fff5b8";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        45,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#0d1330";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x + 18,
+        y - 10,
+        45,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+}
+
+
+// ======================================================
+// CLOUD
+// ======================================================
+
+function drawCloud(
+    worldX,
+    worldY,
+    scale
+) {
+
+    const x =
+        worldX -
+        camera.x * 0.5;
+
+
+    ctx.fillStyle =
+        "rgba(255,255,255,0.9)";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        worldY,
+        25 * scale,
+        0,
+        Math.PI * 2
+    );
+
+
+    ctx.arc(
+        x + 35 * scale,
+        worldY - 15 * scale,
+        35 * scale,
+        0,
+        Math.PI * 2
+    );
+
+
+    ctx.arc(
+        x + 70 * scale,
+        worldY,
+        25 * scale,
+        0,
+        Math.PI * 2
+    );
+
+
+    ctx.fill();
+}
+
+
+// ======================================================
+// PLAYER
+// ======================================================
+
+function drawPlayer() {
+
+    const x =
+        player.x -
+        camera.x +
+        player.width / 2;
+
+
+    const y =
+        player.y +
+        player.height / 2;
+
+
+    const moving =
+        Math.abs(
+            player.velocityX
+        ) > 0.1;
+
+
+    const jumping =
+        !player.onGround;
+
+
+    const run =
+        moving && !jumping
+            ? Math.sin(
+                gameTime * 0.35
+            )
+            : 0;
+
+
+    const night =
+        currentLevel === 2;
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        x,
+        y
+    );
+
+
+    if (
+        player.direction < 0
+    ) {
+
+        ctx.scale(
+            -1,
+            1
+        );
+    }
+
+
+    // ==================================================
+    // WHITE GLOW IN LEVEL 2
+    // ==================================================
+
+    if (night) {
+
+        ctx.shadowColor =
+            "#ffffff";
+
+        ctx.shadowBlur =
+            18;
+    }
+
+
+    ctx.strokeStyle =
+        night
+            ? "#ffffff"
+            : "#222222";
+
+
+    ctx.fillStyle =
+        night
+            ? "#ffffff"
+            : "#222222";
+
+
+    ctx.lineWidth = 4;
+
+    ctx.lineCap =
+        "round";
+
+
+    // ==================================================
+    // ARMS
+    // ==================================================
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -6,
+        -5
+    );
+
+    ctx.lineTo(
+        -13,
+        4 + run * 5
+    );
+
+    ctx.lineTo(
+        -15,
+        14 + run * 5
+    );
+
+    ctx.stroke();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        6,
+        -5
+    );
+
+    ctx.lineTo(
+        13,
+        4 - run * 5
+    );
+
+    ctx.lineTo(
+        15,
+        14 - run * 5
+    );
+
+    ctx.stroke();
+
+
+    // ==================================================
+    // LEGS
+    // ==================================================
+
+    if (
+        !moving &&
+        !jumping
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -4,
+            12
+        );
+
+        ctx.lineTo(
+            -4,
+            27
+        );
+
+
+        ctx.moveTo(
+            4,
+            12
+        );
+
+        ctx.lineTo(
+            4,
+            27
+        );
+
+        ctx.stroke();
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -4,
+            27
+        );
+
+        ctx.lineTo(
+            -10,
+            27
+        );
+
+
+        ctx.moveTo(
+            4,
+            27
+        );
+
+        ctx.lineTo(
+            10,
+            27
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    else if (jumping) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -4,
+            12
+        );
+
+        ctx.lineTo(
+            -10,
+            24
+        );
+
+
+        ctx.moveTo(
+            4,
+            12
+        );
+
+        ctx.lineTo(
+            10,
+            24
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    else {
+
+        const swing =
+            run * 9;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -4,
+            12
+        );
+
+        ctx.lineTo(
+            -5 - swing,
+            27
+        );
+
+
+        ctx.moveTo(
+            4,
+            12
+        );
+
+        ctx.lineTo(
+            5 + swing,
+            27
+        );
+
+        ctx.stroke();
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -5 - swing,
+            27
+        );
+
+        ctx.lineTo(
+            -10 - swing,
+            27
+        );
+
+
+        ctx.moveTo(
+            5 + swing,
+            27
+        );
+
+        ctx.lineTo(
+            10 + swing,
+            27
+        );
+
+        ctx.stroke();
+    }
+
+
+    // ==================================================
+    // BODY
+    // ==================================================
+
+    ctx.lineWidth = 5;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        -7
+    );
+
+    ctx.lineTo(
+        0,
+        13
+    );
+
+    ctx.stroke();
+
+
+    // ==================================================
+    // HEAD
+    // ==================================================
+
+    ctx.fillStyle =
+        night
+            ? "#ffffff"
+            : "#222222";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -17,
+        9,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    // ==================================================
+    // EYE
+    // ==================================================
+
+    ctx.shadowBlur = 0;
+
+
+    ctx.fillStyle =
+        night
+            ? "#1e2340"
+            : "#ffffff";
+
+
+    if (
+        moving ||
+        jumping
+    ) {
+
+        ctx.beginPath();
+
+        ctx.arc(
+            4,
+            -19,
+            1.7,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+    }
+
+    else {
+
+        ctx.strokeStyle =
+            night
+                ? "#1e2340"
+                : "#ffffff";
+
+
+        ctx.lineWidth = 2;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            2.5,
+            -19
+        );
+
+        ctx.lineTo(
+            5.5,
+            -19
+        );
+
+        ctx.stroke();
+    }
+
+
+    ctx.restore();
+}
+
+
+// ======================================================
+// PLATFORMS
+// ======================================================
+
+function drawPlatforms() {
+
+    const night =
+        currentLevel === 2;
+
+
+    for (
+        const platform of platforms
+    ) {
+
+        const x =
+            platform.x -
+            camera.x;
+
+
+        if (
+            x + platform.width < 0 ||
+            x > canvas.width
+        ) {
+
+            continue;
+        }
+
+
+        if (!night) {
+
+            ctx.fillStyle =
+                "#8b5a2b";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                platform.height
+            );
+
+
+            ctx.fillStyle =
+                "#38a169";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                9
+            );
+
+        }
+
+        else {
+
+            ctx.fillStyle =
+                "#4338ca";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                platform.height
+            );
+
+
+            ctx.fillStyle =
+                "#818cf8";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                7
+            );
+        }
+    }
+}
+
+
+// ======================================================
+// COINS
+// ======================================================
+
+function drawCoins() {
+
+    for (
+        const coin of coins
+    ) {
+
+        if (
+            coin.collected
+        ) {
+
+            continue;
+        }
+
+
+        const x =
+            coin.x -
+            camera.x;
+
+
+        const float =
+            Math.sin(
+                gameTime * 0.08 +
+                coin.x
+            ) * 4;
+
+
+        ctx.fillStyle =
+            "rgba(255,215,0,0.25)";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            coin.y + float,
+            20,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#ffd700";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            coin.y + float,
+            coin.radius,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#fff4a3";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x - 4,
+            coin.y + float - 4,
+            4,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
+
+
+// ======================================================
+// ENEMIES
+// ======================================================
+
+function drawEnemies() {
+
+    for (
+        const enemy of enemies
+    ) {
+
+        if (!enemy.alive) {
+
+            continue;
+        }
+
+
+        const x =
+            enemy.x -
+            camera.x;
+
+
+        const y =
+            enemy.y;
+
+
+        ctx.fillStyle =
+            currentLevel === 2
+                ? "#ef3f9d"
+                : "#8b5cf6";
+
+
+        ctx.beginPath();
+
+
+        if (
+            ctx.roundRect
+        ) {
+
+            ctx.roundRect(
+                x,
+                y,
+                enemy.width,
+                enemy.height,
+                10
+            );
+
+        }
+
+        else {
+
+            ctx.rect(
+                x,
+                y,
+                enemy.width,
+                enemy.height
+            );
+
+        }
+
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#ffffff";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x + 12,
+            y + 14,
+            7,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.arc(
+            x + 28,
+            y + 14,
+            7,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#111111";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x + 12,
+            y + 14,
+            3,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.arc(
+            x + 28,
+            y + 14,
+            3,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.fill();
+    }
+}
+
+
+// ======================================================
+// GOAL
+// ======================================================
+
+function drawGoal() {
+
+    if (goal.reached) {
+
+        return;
+    }
+
+
+    const x =
+        goal.x -
+        camera.x;
+
+
+    ctx.fillStyle =
+        "#555555";
+
+
+    ctx.fillRect(
+        x,
+        goal.y,
+        7,
+        goal.height
+    );
+
+
+    ctx.fillStyle =
+        "#ffd700";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x + 3,
+        goal.y,
+        7,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        currentLevel === 2
+            ? "#22d3ee"
+            : "#ef4444";
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x + 7,
+        goal.y + 5
+    );
+
+
+    ctx.lineTo(
+        x + 55,
+        goal.y + 25
+    );
+
+
+    ctx.lineTo(
+        x + 7,
+        goal.y + 45
+    );
+
+
+    ctx.closePath();
+
+    ctx.fill();
+}
+
+
+// ======================================================
+// DRAW FRAME
+// ======================================================
+
+function drawFrame() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    drawBackground();
+
+    drawPlatforms();
+
+    drawCoins();
+
+    drawEnemies();
+
+    drawGoal();
+
+    drawPlayer();
+}
+
+
+// ======================================================
+// GAME LOOP
+// ======================================================
+
+function gameLoop() {
+
+    if (!gameRunning) {
+
+        drawFrame();
+
+        return;
+    }
+
+
+    if (!paused) {
+
+        gameTime++;
+
+
+        updatePlayer();
+
+
+        if (
+            !gameOver &&
+            !levelComplete &&
+            !adPlaying
+        ) {
+
+            updateEnemies();
+
+            checkCoinCollection();
+
+            checkEnemyCollision();
+
+            checkGoal();
+
+            updateCamera();
+
+            updateUI();
+        }
+    }
+
+
+    drawFrame();
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
+}
+
+
+// ======================================================
+// LEVEL INTRO
+// ======================================================
+
+function showLevelIntro(
+    level,
+    callback
+) {
+
+    const introScreen =
+        document.getElementById(
+            "levelIntroScreen"
+        );
+
+
+    const introLevel =
+        document.getElementById(
+            "introLevel"
+        );
+
+
+    const introSubtitle =
+        document.getElementById(
+            "introSubtitle"
+        );
+
+
+    if (!introScreen) {
+
+        callback();
+
+        return;
+    }
+
+
+    introLevel.textContent =
+        "LEVEL " + level;
+
+
+    if (level === 1) {
+
+        introSubtitle.textContent =
+            "READY?";
+
+    }
+
+    else {
+
+        introSubtitle.textContent =
+            "NIGHT RUN";
+
+    }
+
+
+    introScreen.classList.remove(
+        "hidden"
+    );
+
+
+    setTimeout(
+        function() {
+
+            introScreen.classList.add(
+                "hidden"
+            );
+
+
+            callback();
+
+        },
+        1800
+    );
+}
+
+
+// ======================================================
+// INITIALIZE
+// ======================================================
+
+loadLevel(1);
+
+updateUI();
+
+drawFrame();
