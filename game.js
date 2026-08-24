@@ -804,6 +804,8 @@ function startGame() {
 
     reviveUsed = false;
 
+    live = 3;
+
     adPlaying = false;
 
 
@@ -895,6 +897,10 @@ function nextLevel() {
     }
 
 
+    // ==============================================
+    // MOVE TO NEXT LEVEL
+    // ==============================================
+
     currentLevel++;
 
 
@@ -910,16 +916,45 @@ function nextLevel() {
 
     gameWon = false;
 
+
+    // ==============================================
+    // NEW LEVEL = RESET LIVES TO 3
+    // ==============================================
+
+    lives = 3;
+
+
+    // ==============================================
+    // RESET REVIVE FOR NEW LEVEL
+    // ==============================================
+
     reviveUsed = false;
 
 
-    levelCompleteScreen.classList.add("hidden");
+    levelCompleteScreen.classList.add(
+        "hidden"
+    );
 
-    gameScreen.classList.remove("hidden");
+    gameScreen.classList.remove(
+        "hidden"
+    );
 
 
-    loadLevel(currentLevel);
+    // ==============================================
+    // LOAD NEXT LEVEL
+    // ==============================================
 
+    loadLevel(
+        currentLevel
+    );
+
+
+    updateUI();
+
+
+    // ==============================================
+    // LEVEL INTRO
+    // ==============================================
 
     showLevelIntro(
         currentLevel,
@@ -927,12 +962,15 @@ function nextLevel() {
 
             gameRunning = true;
 
-            requestAnimationFrame(gameLoop);
+            updateUI();
+
+            requestAnimationFrame(
+                gameLoop
+            );
 
         }
     );
 }
-
 
 // ======================================================
 // MAIN MENU
