@@ -3,19 +3,19 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>JAMPU</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+<title>
+JAMPU - STICKMAN ADVENTURE
+</title>
+
+
+<link rel="stylesheet" href="style.css">
+
 
 </head>
 
@@ -23,389 +23,842 @@
 <body>
 
 
+
+
 <!-- =====================================================
-     START SCREEN
+MAIN MENU
 ===================================================== -->
 
+
 <div
-    id="startScreen"
-    class="screen"
+id="startScreen"
+class="screen"
 >
 
-    <div class="menu-card">
 
-        <div class="logo">
-            JAMPU
-        </div>
+<div class="menu-card">
 
-        <div class="logo-subtitle">
-            STICKMAN ADVENTURE
-        </div>
 
-        <div class="menu-character">
-            🏃
-        </div>
+<div class="logo">
 
-        <p class="menu-description">
-            Run. Jump. Collect. Survive.
-        </p>
+JAMPU
 
-        <button
-            id="startButton"
-            class="main-button"
-        >
-            ▶ PLAY
-        </button>
+</div>
 
-        <div class="controls">
 
-            <div>
-                <span>← →</span>
-                Move
-            </div>
+<div class="logo-subtitle">
 
-            <div>
-                <span>SPACE</span>
-                Jump
-            </div>
+STICKMAN ADVENTURE
 
-        </div>
+</div>
 
-    </div>
+
+
+<div class="menu-character">
+
+🏃
+
+</div>
+
+
+
+
+<p class="menu-description">
+
+Run. Jump. Collect. Survive.
+
+</p>
+
+
+
+
+<button
+id="startButton"
+class="main-button"
+>
+
+▶ PLAY
+
+</button>
+
+
+
+
+
+<button
+id="levelSelectButton"
+class="secondary-button"
+>
+
+🌎 LEVEL SELECT
+
+</button>
+
+
+
+
+
+<div class="controls">
+
+
+<div>
+
+<span>
+← →
+</span>
+
+Move
+
+</div>
+
+
+
+<div>
+
+<span>
+SPACE
+</span>
+
+Jump
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =====================================================
+LEVEL SELECT
+===================================================== -->
+
+
+<div
+id="levelSelectScreen"
+class="screen hidden"
+>
+
+
+<div class="menu-card">
+
+
+
+<div class="logo">
+
+LEVEL SELECT
+
+</div>
+
+
+
+<button
+id="level1Button"
+class="main-button"
+>
+
+🌳 LEVEL 1
+
+</button>
+
+
+
+
+<button
+id="level2Button"
+class="secondary-button"
+>
+
+🌙 LEVEL 2 🔒
+
+</button>
+
+
+
+
+
+<button
+id="level3Button"
+class="secondary-button"
+>
+
+🌋 LEVEL 3 🔒
+
+</button>
+
+
+
+
+
+<button
+id="backMenuButton"
+class="secondary-button"
+>
+
+← BACK
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- =====================================================
+GAME SCREEN
+===================================================== -->
+
+
+<div
+id="gameScreen"
+class="game-screen hidden"
+>
+
+
+
+
+
+<div class="hud">
+
+
+<div class="hud-left">
+
+
+<div class="hud-item">
+
+
+<span class="hud-label">
+
+SCORE
+
+</span>
+
+
+
+<span id="scoreDisplay">
+
+000000
+
+</span>
+
+
+</div>
+
+
+
+
+
+
+<div class="hud-item">
+
+
+<span class="hud-label">
+
+COINS
+
+</span>
+
+
+
+<span>
+
+🪙
+
+<span id="coinDisplay">
+
+0
+
+</span>
+
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="hud-item">
+
+
+<span class="hud-label">
+
+LEVEL
+
+</span>
+
+
+
+<span id="levelDisplay">
+
+1
+
+</span>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="hud-right">
+
+
+<div
+id="livesDisplay"
+class="lives"
+>
+
+❤️ ❤️ ❤️
+
+</div>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<canvas
+
+id="gameCanvas"
+
+width="1000"
+
+height="600"
+
+>
+
+</canvas>
+
+
+
+
+
+<div class="game-tip">
+
+← → Move &nbsp;&nbsp; SPACE Jump
+
+</div>
 
 </div>
 
 
 <!-- =====================================================
-     GAME SCREEN
+LEVEL INTRO
 ===================================================== -->
 
+
 <div
-    id="gameScreen"
-    class="game-screen hidden"
+id="levelIntroScreen"
+class="overlay hidden"
 >
 
 
-    <!-- =================================================
-         HUD
-    ================================================= -->
-
-    <div class="hud">
-
-        <div class="hud-left">
-
-            <div class="hud-item">
-
-                <span class="hud-label">
-                    SCORE
-                </span>
-
-                <span id="scoreDisplay">
-                    000000
-                </span>
-
-            </div>
+<div class="level-intro">
 
 
-            <div class="hud-item">
+<div class="intro-small">
 
-                <span class="hud-label">
-                    COINS
-                </span>
-
-                <span>
-                    🪙
-                    <span id="coinDisplay">
-                        0
-                    </span>
-                </span>
-
-            </div>
-
-
-            <div class="hud-item">
-
-                <span class="hud-label">
-                    LEVEL
-                </span>
-
-                <span id="levelDisplay">
-                    1
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="hud-right">
-
-            <div
-                id="livesDisplay"
-                class="lives"
-            >
-                ❤️ ❤️ ❤️
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =================================================
-         CANVAS
-    ================================================= -->
-
-    <canvas
-        id="gameCanvas"
-        width="1000"
-        height="600"
-    ></canvas>
-
-
-    <div class="game-tip">
-        ← → Move &nbsp;&nbsp; SPACE Jump
-    </div>
+GET READY
 
 </div>
+
+
+
+<div
+id="introLevel"
+class="intro-level"
+>
+
+LEVEL 1
+
+</div>
+
+
+
+<div
+id="introSubtitle"
+class="intro-subtitle"
+>
+
+READY?
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
 
 
 <!-- =====================================================
-     LEVEL INTRO
+GAME OVER
 ===================================================== -->
 
+
 <div
-    id="levelIntroScreen"
-    class="overlay hidden"
+id="gameOverScreen"
+class="overlay hidden"
 >
 
-    <div class="level-intro">
 
-        <div class="intro-small">
-            GET READY
-        </div>
+<div class="popup-card game-over-card">
 
-        <div
-            id="introLevel"
-            class="intro-level"
-        >
-            LEVEL 1
-        </div>
 
-        <div
-            id="introSubtitle"
-            class="intro-subtitle"
-        >
-            READY?
-        </div>
+<div class="popup-icon">
 
-    </div>
+💀
 
 </div>
+
+
+
+<h1>
+
+GAME OVER
+
+</h1>
+
+
+
+
+<p class="popup-score">
+
+SCORE:
+
+<span id="finalScore">
+
+000000
+
+</span>
+
+
+</p>
+
+
+
+
+
+<button
+
+id="reviveButton"
+
+class="ad-button"
+
+>
+
+📺 WATCH AD TO REVIVE
+
+</button>
+
+
+
+
+
+
+<div
+id="reviveInfo"
+class="revive-info"
+>
+
+Watch a short ad to get
+
+<strong>
+1 ❤️
+</strong>
+
+and continue.
+
+
+</div>
+
+
+
+
+
+
+
+<button
+
+id="restartButton"
+
+class="main-button small-button"
+
+>
+
+↻ TRY AGAIN
+
+</button>
+
+
+
+
+
+
+
+
+<button
+
+id="mainMenuButton"
+
+class="secondary-button"
+
+>
+
+BACK TO MAIN MENU
+
+</button>
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
 
 
 <!-- =====================================================
-     GAME OVER
+FAKE AD SCREEN
 ===================================================== -->
 
+
 <div
-    id="gameOverScreen"
-    class="overlay hidden"
+
+id="adScreen"
+
+class="overlay hidden"
+
 >
 
-    <div class="popup-card game-over-card">
-
-        <div class="popup-icon">
-            💀
-        </div>
-
-        <h1>
-            GAME OVER
-        </h1>
-
-        <p class="popup-score">
-            SCORE:
-            <span id="finalScore">
-                000000
-            </span>
-        </p>
 
 
-        <!-- WATCH AD -->
-
-        <button
-            id="reviveButton"
-            class="ad-button"
-        >
-            📺 WATCH AD TO REVIVE
-        </button>
+<div class="ad-card">
 
 
-        <div
-            id="reviveInfo"
-            class="revive-info"
-        >
-            Watch a short ad to get
-            <strong>1 ❤️</strong>
-            and continue.
-        </div>
+<div class="ad-label">
 
-
-        <!-- TRY AGAIN -->
-
-        <button
-            id="restartButton"
-            class="main-button small-button"
-        >
-            ↻ TRY AGAIN
-        </button>
-
-
-        <!-- MAIN MENU -->
-
-        <button
-            id="mainMenuButton"
-            class="secondary-button"
-        >
-            BACK TO MAIN MENU
-        </button>
-
-    </div>
+ADVERTISEMENT
 
 </div>
+
+
+
+
+<div class="ad-icon">
+
+📺
+
+</div>
+
+
+
+
+<h2>
+
+Reward Ad
+
+</h2>
+
+
+
+
+<p>
+
+Your reward will be ready soon.
+
+</p>
+
+
+
+
+
+<div
+
+id="adCountdown"
+
+class="ad-countdown"
+
+>
+
+5
+
+</div>
+
+
+
+
+
+<div class="ad-loading">
+
+
+<div class="loading-bar"></div>
+
+
+</div>
+
+
+
+
+
+<p class="ad-small">
+
+Please wait...
+
+</p>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
 
 
 <!-- =====================================================
-     FAKE AD SCREEN
+REVIVE SUCCESS
 ===================================================== -->
 
+
 <div
-    id="adScreen"
-    class="overlay hidden"
+
+id="reviveScreen"
+
+class="overlay hidden"
+
 >
 
-    <div class="ad-card">
 
-        <div class="ad-label">
-            ADVERTISEMENT
-        </div>
 
-        <div class="ad-icon">
-            📺
-        </div>
+<div class="revive-card">
 
-        <h2>
-            Reward Ad
-        </h2>
 
-        <p>
-            Your reward will be ready soon.
-        </p>
 
-        <div
-            id="adCountdown"
-            class="ad-countdown"
-        >
-            5
-        </div>
+<div class="revive-icon">
 
-        <div class="ad-loading">
-
-            <div class="loading-bar"></div>
-
-        </div>
-
-        <p class="ad-small">
-            Please wait...
-        </p>
-
-    </div>
+❤️
 
 </div>
+
+
+
+
+<h1>
+
+REVIVED!
+
+</h1>
+
+
+
+
+
+<p>
+
+You have been given
+
+<strong>
+
+1 LIFE
+
+</strong>
+
+
+</p>
+
+
+
+
+
+<div class="revive-glow">
+
+GET READY!
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
 
 
 <!-- =====================================================
-     REVIVE SUCCESS
+LEVEL COMPLETE
 ===================================================== -->
 
+
 <div
-    id="reviveScreen"
-    class="overlay hidden"
+
+id="levelCompleteScreen"
+
+class="overlay hidden"
+
 >
 
-    <div class="revive-card">
 
-        <div class="revive-icon">
-            ❤️
-        </div>
 
-        <h1>
-            REVIVED!
-        </h1>
+<div class="popup-card complete-card">
 
-        <p>
-            You have been given
-            <strong>1 LIFE</strong>.
-        </p>
 
-        <div class="revive-glow">
-            GET READY!
-        </div>
+<div class="popup-icon">
 
-    </div>
+🏆
 
 </div>
 
 
-<!-- =====================================================
-     LEVEL COMPLETE
-===================================================== -->
 
-<div
-    id="levelCompleteScreen"
-    class="overlay hidden"
+
+<h1>
+
+LEVEL COMPLETE!
+
+</h1>
+
+
+
+
+
+<p class="popup-score">
+
+SCORE:
+
+<span id="levelScore">
+
+000000
+
+</span>
+
+
+</p>
+
+
+
+
+
+
+<button
+
+id="nextLevelButton"
+
+class="main-button"
+
 >
 
-    <div class="popup-card complete-card">
+NEXT LEVEL →
 
-        <div class="popup-icon">
-            🏆
-        </div>
-
-        <h1>
-            LEVEL COMPLETE!
-        </h1>
-
-        <p class="popup-score">
-            SCORE:
-            <span id="levelScore">
-                000000
-            </span>
-        </p>
+</button>
 
 
-        <button
-            id="nextLevelButton"
-            class="main-button"
-        >
-            NEXT LEVEL →
-        </button>
 
 
-        <button
-            id="completeMenuButton"
-            class="secondary-button"
-        >
-            BACK TO MAIN MENU
-        </button>
 
-    </div>
+
+<button
+
+id="completeMenuButton"
+
+class="secondary-button"
+
+>
+
+BACK TO MAIN MENU
+
+</button>
+
+
+
 
 </div>
+
+
+</div>
+
+
+
+
+
+
 
 
 <script src="game.js"></script>
 
+
+
 </body>
 
+
 </html>
+
