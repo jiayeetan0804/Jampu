@@ -3279,6 +3279,54 @@ function drawFireballs(){
 
 }
 
+function drawMovingPlatforms(){
+
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    ctx.globalCompositeOperation = "source-over";
+
+
+    for(
+        const platform of movingPlatforms
+    ){
+
+
+        const x =
+        platform.x - camera.x;
+
+
+
+        ctx.fillStyle =
+        "#2563eb";
+
+
+        ctx.fillRect(
+
+            x,
+
+            platform.y,
+
+            platform.width,
+
+            platform.height
+
+        );
+
+
+    }
+
+
+
+    // reset canvas state
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    ctx.globalCompositeOperation = "source-over";
+
+
+}
+
 // ======================================================
 // DAY MOUNTAINS
 // ======================================================
@@ -4564,55 +4612,49 @@ function drawGoal() {
 // DRAW FRAME
 // ======================================================
 
-function drawFrame() {
-
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+function drawFrame(){
 
 
-    drawBackground();
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
 
 
-    // 强制恢复状态
-    ctx.globalAlpha = 1;
-    ctx.shadowBlur = 0;
+
+ctx.globalAlpha = 1;
+ctx.shadowBlur = 0;
+ctx.globalCompositeOperation="source-over";
 
 
-    drawLava();
 
+drawBackground();
 
-    // 再恢复一次
-    ctx.globalAlpha = 1;
-    ctx.shadowBlur = 0;
+drawLava();
 
+drawPlatforms();
 
-    drawPlatforms();
+drawMovingPlatforms();
 
+drawJumpPads();
 
-    // 再恢复一次
-    ctx.globalAlpha = 1;
-    ctx.shadowBlur = 0;
+drawFireballs();
 
+drawRocks();
 
-    drawJumpPads();
+drawCoins();
 
-    drawRocks();
+drawEnemies();
 
-    drawFireballs();
+drawGoal();
 
-    drawCoins();
+drawPlayer();
 
-    drawEnemies();
+ctx.globalAlpha=1;
+ctx.shadowBlur=0;
 
-    drawGoal();
-
-    drawPlayer();
-
-    ctx.globalAlpha = 1;
 
 }
 
