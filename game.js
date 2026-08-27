@@ -500,6 +500,83 @@ const levels = {
 
     theme: "volcano",
 
+    coins:[
+
+
+    // 前半区域
+
+    {
+        x:680,
+        y:400
+    },
+
+
+    {
+        x:930,
+        y:320
+    },
+
+
+    {
+        x:1180,
+        y:390
+    },
+
+
+    {
+        x:1430,
+        y:270
+    },
+
+
+    {
+        x:1680,
+        y:360
+    },
+
+
+    // ======================
+    // 第二阶段
+    // ======================
+
+
+    {
+        x:2730,
+        y:360
+    },
+
+
+    {
+        x:3230,
+        y:280
+    },
+
+
+    {
+        x:3530,
+        y:190
+    },
+
+
+    // ======================
+    // Final Escape
+    // ======================
+
+
+    {
+        x:3880,
+        y:310
+    },
+
+
+    {
+        x:4250,
+        y:460
+    }
+
+
+],
+
     rocks:[
     {
         x:1200,
@@ -526,19 +603,32 @@ const levels = {
      jumpPads: [
 
     {
-        x:1950,
+         x:1950,
         y:500,
         width:80,
         height:20,
         power:24
-    },
+    }
 
+],
+
+movingPlatforms:[
+    
     {
-         x:3000,
-        y:500,
-        width:80,
-        height:20,
-        power:26
+        x:2900,
+        y:450,
+
+        width:160,
+        height:25,
+
+        startY:300,
+        endY:500,
+
+        speed:1,
+
+        direction:1,
+
+        moving:true
     }
 
 ],
@@ -546,121 +636,113 @@ const levels = {
     platforms:[
 
 
-        // START
-        {
-            x:0,
-            y:540,
-            width:700,
-            height:60
-        },
+{
+x:0,
+y:540,
+width:500,
+height:60
+},
 
 
-        // 1
-        {
-            x:850,
-            y:460,
-            width:180,
-            height:25
-        },
+{
+x:600,
+y:460,
+width:180,
+height:25
+},
 
 
-        // 2
-        {
-            x:1150,
-            y:380,
-            width:180,
-            height:25
-        },
+{
+x:850,
+y:380,
+width:180,
+height:25,
+},
 
 
-        // 3
-        {
-            x:1450,
-            y:300,
-            width:180,
-            height:25
-        },
+{
+x:1100,
+y:450,
+width:180,
+height:25
+},
 
 
-        // 4
-        {
-            x:1750,
-            y:420,
-            width:220,
-            height:25
-        },
+{
+x:1350,
+y:330,
+width:180,
+height:25
+},
 
 
-        // 5
-        {
-            x:2100,
-            y:340,
-            width:180,
-            height:25
-        },
+{
+x:1600,
+y:420,
+width:220,
+height:25
+},
+
+{
+x:2050,
+y:340,
+width:180,
+height:25
+},
 
 
-        // 6
-        {
-            x:2400,
-            y:250,
-            width:180,
-            height:25
-        },
+{
+x:2350,
+y:250,
+width:180,
+height:25
+},
 
 
-        // 7
-        {
-            x:2750,
-            y:400,
-            width:220,
-            height:25
-        },
+{
+x:2650,
+y:400,
+width:220,
+height:25
+},
 
 
-        // 8
-        {
-            x:3150,
-            y:320,
-            width:180,
-            height:25
-        },
+{
+x:3150,
+y:320,
+width:180,
+height:25
+},
 
 
-        // 9
-        {
-            x:3500,
-            y:220,
-            width:180,
-            height:25
-        },
+{
+x:3450,
+y:230,
+width:180,
+height:25
+},
 
 
-        // 10
-        {
-            x:3900,
-            y:350,
-            width:220,
-            height:25
-        },
+{
+    x:3800,
+    y:350,
+    width:180,
+    height:25
+},
+
+{
+x:4150,
+y:500,
+width:700,
+height:40
+},
 
 
-        // final area
-        {
-            x:4400,
-            y:500,
-            width:600,
-            height:40
-        }
-
-
-    ],
-
-
+],
 
     goal:{
 
-        x:4800,
+        x:4300,
 
         y:400,
 
@@ -702,6 +784,8 @@ let goal = null;
 let worldWidth = 5000;
 
 let lava = null;
+
+let fireballs = [];
 
 // ======================================================
 // PLAYER
@@ -759,6 +843,35 @@ const startScreen =
 
 const gameScreen =
     document.getElementById("gameScreen");
+
+const gameMenu =
+    document.getElementById(
+        "gameMenu"
+    );
+
+
+const pauseButton =
+    document.getElementById(
+        "pauseButton"
+    );
+
+
+const pauseScreen =
+    document.getElementById(
+        "pauseScreen"
+    );
+
+
+const resumeButton =
+    document.getElementById(
+        "resumeButton"
+    );
+
+
+const pauseMenuButton =
+    document.getElementById(
+        "pauseMenuButton"
+    );
 
 const gameOverScreen =
     document.getElementById("gameOverScreen");
@@ -852,12 +965,73 @@ const level3Button =
     );
 
 
-const backMenuButton =
-    document.getElementById(
-        "backMenuButton"
+// ======================================================
+// PAUSE BUTTON
+// ======================================================
+pauseButton.addEventListener(
+"click",
+
+function(){
+
+
+    if(
+        !gameRunning ||
+        gameOver ||
+        levelComplete
+    ){
+
+        return;
+
+    }
+
+
+    paused = true;
+
+
+    pauseScreen.classList.remove(
+        "hidden"
     );
 
 
+}
+);
+
+// ======================================================
+// RESUME BUTTON
+// ======================================================
+resumeButton.addEventListener(
+"click",
+
+function(){
+
+
+    paused = false;
+
+
+    pauseScreen.classList.add(
+        "hidden"
+    );
+
+
+}
+);
+
+pauseMenuButton.addEventListener(
+"click",
+
+function(){
+
+
+    pauseScreen.classList.add(
+        "hidden"
+    );
+
+
+    goToMainMenu();
+
+
+}
+);
 
 // ======================================================
 // KEYBOARD
@@ -997,6 +1171,20 @@ function loadLevel(levelNumber) {
     jumpPads =
         level.jumpPads || [];
 
+    
+    // LOAD MOVING PLATFORMS
+
+    movingPlatforms =
+    level.movingPlatforms
+    ?
+    level.movingPlatforms.map(
+    platform => ({
+        ...platform
+    })
+    )
+    :
+    [];
+
 
     // LOAD LAVA
 
@@ -1011,6 +1199,98 @@ function loadLevel(levelNumber) {
     updateUI();
 
     drawFrame();
+
+}
+
+function updateRocks(){
+
+
+    for(
+        const rock of fallingRocks
+    ){
+
+        rock.y += rock.speed;
+
+
+        if(
+            rock.y > canvas.height
+        ){
+
+            rock.y=-100;
+
+        }
+
+
+        const hit =
+
+        player.x <
+        rock.x + rock.size &&
+
+        player.x + player.width >
+        rock.x &&
+
+        player.y <
+        rock.y + rock.size &&
+
+        player.y + player.height >
+        rock.y;
+
+
+        if(hit){
+
+            loseLife();
+
+        }
+
+    }
+
+}
+
+function drawRocks(){
+
+    for(
+        const rock of fallingRocks
+    ){
+
+        const x =
+        rock.x-camera.x;
+
+
+        ctx.fillStyle="#333";
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            x,
+            rock.y,
+            rock.size/2,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fill();
+
+
+        ctx.fillStyle="#ff4500";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x-8,
+            rock.y-8,
+            8,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    }
+
 }
 
 function checkJumpPads() {
@@ -1134,10 +1414,16 @@ function updateUI() {
 // ======================================================
 
 
+// ======================================================
+// START SELECTED LEVEL
+// ======================================================
+
+
 function startLevel(level){
 
 
     currentLevel = level;
+
 
 
     score = 0;
@@ -1150,7 +1436,7 @@ function startLevel(level){
     gameTime = 0;
 
 
-    gameRunning = true;
+    gameRunning = false;
 
     paused = false;
 
@@ -1159,11 +1445,29 @@ function startLevel(level){
     levelComplete = false;
 
 
-    loadLevel(
-        level
+
+    // ==========================
+    // SHOW GAME SCREEN
+    // ==========================
+
+    gameScreen.classList.remove(
+        "hidden"
     );
 
 
+    // ==========================
+    // SHOW PAUSE BUTTON
+    // ==========================
+
+    gameMenu.classList.remove(
+        "hidden"
+    );
+
+
+
+    // ==========================
+    // HIDE MENU
+    // ==========================
 
     startScreen.classList.add(
         "hidden"
@@ -1175,27 +1479,44 @@ function startLevel(level){
     );
 
 
-    gameScreen.classList.remove(
-        "hidden"
+
+    // ==========================
+    // LOAD LEVEL
+    // ==========================
+
+    loadLevel(
+        level
     );
 
 
+
+    // ==========================
+    // LEVEL INTRO
+    // ==========================
 
     showLevelIntro(
         level,
 
         function(){
 
+
+            gameRunning = true;
+
+
+            updateUI();
+
+
+            drawFrame();
+
+
             requestAnimationFrame(
                 gameLoop
             );
 
+
         }
 
     );
-
-
-    updateUI();
 
 }
 
@@ -1207,29 +1528,19 @@ function startLevel(level){
 function startGame() {
 
     score = 0;
-
     coinCount = 0;
-
     lives = 3;
-
     currentLevel = 1;
 
     gameTime = 0;
 
     gameRunning = true;
-
     paused = false;
-
     gameOver = false;
-
     levelComplete = false;
-
     gameWon = false;
 
     reviveUsed = false;
-
-    lives = 3;
-
     adPlaying = false;
 
 
@@ -1237,24 +1548,25 @@ function startGame() {
 
 
     startScreen.classList.add("hidden");
-
-    gameScreen.classList.remove("hidden");
-
     gameOverScreen.classList.add("hidden");
-
     levelCompleteScreen.classList.add("hidden");
-
     adScreen.classList.add("hidden");
-
     reviveScreen.classList.add("hidden");
 
 
     updateUI();
 
 
-    requestAnimationFrame(gameLoop);
-}
+    showLevelIntro(
+        1,
+        function(){
 
+            requestAnimationFrame(gameLoop);
+
+        }
+    );
+
+}
 
 // ======================================================
 // RESTART CURRENT LEVEL
@@ -1313,17 +1625,11 @@ function restartGame() {
 function nextLevel() {
 
     if (
-        currentLevel >=
-        Object.keys(levels).length
+        currentLevel >= Object.keys(levels).length
     ) {
-
         return;
     }
 
-
-    // ==============================================
-    // MOVE TO NEXT LEVEL
-    // ==============================================
 
     currentLevel++;
 
@@ -1341,16 +1647,7 @@ function nextLevel() {
     gameWon = false;
 
 
-    // ==============================================
-    // NEW LEVEL = RESET LIVES TO 3
-    // ==============================================
-
     lives = 3;
-
-
-    // ==============================================
-    // RESET REVIVE FOR NEW LEVEL
-    // ==============================================
 
     reviveUsed = false;
 
@@ -1359,14 +1656,11 @@ function nextLevel() {
         "hidden"
     );
 
+
     gameScreen.classList.remove(
         "hidden"
     );
 
-
-    // ==============================================
-    // LOAD NEXT LEVEL
-    // ==============================================
 
     loadLevel(
         currentLevel
@@ -1376,26 +1670,37 @@ function nextLevel() {
     updateUI();
 
 
-    // ==============================================
-    // LEVEL INTRO
-    // ==============================================
-
     showLevelIntro(
         currentLevel,
-        function() {
+
+        function(){
+
+            console.log(
+                "START LEVEL",
+                currentLevel
+            );
+
 
             gameRunning = true;
 
+            paused = false;
+
+
             updateUI();
+
+
+            drawFrame();
+
 
             requestAnimationFrame(
                 gameLoop
             );
 
         }
-    );
-}
 
+    );
+
+}
 
 // ======================================================
 // MAIN MENU
@@ -1434,6 +1739,13 @@ function goToMainMenu() {
 
     gameScreen.classList.add("hidden");
 
+    document
+    .getElementById("gameMenu")
+    .classList.add(
+    "hidden");
+
+    pauseScreen.classList.add("hidden");
+
     gameOverScreen.classList.add("hidden");
 
     levelCompleteScreen.classList.add("hidden");
@@ -1451,6 +1763,11 @@ function goToMainMenu() {
     updateUI();
 
     drawFrame();
+
+
+pauseScreen.classList.add(
+"hidden"
+);
 }
 
 
@@ -1460,25 +1777,25 @@ function goToMainMenu() {
 
 startButton.addEventListener(
     "click",
-    function() {
+    function(){
 
         startButton.disabled = true;
 
-        startScreen.classList.add("hidden");
 
-        gameScreen.classList.remove("hidden");
-
-
-        showLevelIntro(
-            1,
-            function() {
-
-                startLevel(1);
-
-                startButton.disabled = false;
-
-            }
+        startScreen.classList.add(
+            "hidden"
         );
+
+
+        gameScreen.classList.remove(
+            "hidden"
+        );
+
+
+        startLevel(1);
+
+
+        startButton.disabled = false;
 
     }
 );
@@ -1505,6 +1822,49 @@ completeMenuButton.addEventListener(
 nextLevelButton.addEventListener(
     "click",
     nextLevel
+);
+
+pauseButton.addEventListener(
+    "click",
+    function(){
+
+        paused = true;
+
+        pauseScreen.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
+
+
+resumeButton.addEventListener(
+    "click",
+    function(){
+
+        paused = false;
+
+        pauseScreen.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+
+
+pauseMenuButton.addEventListener(
+    "click",
+    function(){
+
+        pauseScreen.classList.add(
+            "hidden"
+        );
+
+        goToMainMenu();
+
+    }
 );
 
 // ======================================================
@@ -1764,9 +2124,19 @@ function updatePlayer() {
     // PLATFORM COLLISION
     // ==================================================
 
+    const allPlatforms = [
+
+    ...platforms,
+
+    ...movingPlatforms
+
+    ];
+
     for (
-        const platform of platforms
-    ) {
+        const platform of allPlatforms
+    ) 
+    
+    {
 
         const playerLeft =
             player.x;
@@ -1819,24 +2189,44 @@ function updatePlayer() {
         }
 
 
-        // LAND
+       if (
 
-        if (
-            player.velocityY >= 0 &&
-            previousBottom <= platformTop &&
-            playerBottom >= platformTop
-        ) {
+        player.velocityY >= 0 &&
 
-            player.y =
-                platformTop -
-                player.height;
+        previousBottom <= platformTop + 15 &&
 
-            player.velocityY = 0;
+        playerBottom >= platformTop
 
-            player.onGround = true;
+        )
+{
 
-            continue;
-        }
+
+player.y =
+platformTop -
+player.height;
+
+
+player.velocityY = 0;
+
+
+player.onGround = true;
+
+if(platform.moving){
+
+    player.standingPlatform =
+        platform;
+
+}
+else{
+
+    player.standingPlatform =
+        null;
+
+}
+
+continue;
+
+}
 
 
         // HIT FROM BELOW
@@ -1845,13 +2235,16 @@ function updatePlayer() {
             player.velocityY < 0 &&
             previousTop >= platformBottom &&
             playerTop <= platformBottom
-        ) {
+        ) 
+        {
 
             player.y =
                 platformBottom;
 
             player.velocityY = 0;
         }
+
+    
     }
 
 
@@ -1886,7 +2279,9 @@ function updatePlayer() {
 
         loseLife();
     }
+
 }
+
 
 
 // ======================================================
@@ -1941,6 +2336,37 @@ function updateEnemies() {
     }
 }
 
+// ======================================================
+// MOVING PLATFORMS
+// ======================================================
+
+function updateMovingPlatforms(){
+
+
+    for(
+        const p of movingPlatforms
+    ){
+
+
+        p.y +=
+        p.speed *
+        p.direction;
+
+
+
+        if(
+            p.y <= p.startY ||
+            p.y >= p.endY
+        ){
+
+            p.direction *= -1;
+
+        }
+
+
+    }
+
+}
 
 // ======================================================
 // ENEMY COLLISION
@@ -2656,8 +3082,7 @@ function drawAshParticles(){
 
     ctx.fillStyle =
         "rgba(200,200,200,0.4)";
-
-
+    
     for(
         let i=0;
         i<60;
@@ -2709,6 +3134,148 @@ function drawAshParticles(){
 
     }
 
+    ctx.globalAlpha = 1;
+}
+
+function createFireballs(){
+
+
+    fireballs.push({
+
+        x:
+        Math.random()
+        *
+        worldWidth,
+
+
+        y:
+        -50,
+
+
+        radius:
+        6 + Math.random()*5,
+
+
+        speed:
+        3 + Math.random()*3
+
+    });
+
+
+}
+
+function updateFireballs(){
+
+
+    for(
+        let i=fireballs.length-1;
+        i>=0;
+        i--
+    ){
+
+
+        let fire =
+            fireballs[i];
+
+
+        fire.y +=
+            fire.speed;
+
+
+
+        if(
+            fire.y >
+            canvas.height
+        ){
+
+            fireballs.splice(
+                i,
+                1
+            );
+
+        }
+
+
+
+        // hit player
+
+        if(
+
+        player.x <
+        fire.x + fire.radius &&
+
+        player.x + player.width >
+        fire.x - fire.radius &&
+
+        player.y <
+        fire.y + fire.radius &&
+
+        player.y + player.height >
+        fire.y - fire.radius
+
+        ){
+
+            fireballs.splice(
+                i,
+                1
+            );
+
+
+            loseLife();
+
+        }
+
+    }
+
+}
+
+function drawFireballs(){
+
+
+    for(
+        const fire of fireballs
+    ){
+
+
+        ctx.shadowColor =
+            "#ff3300";
+
+
+        ctx.shadowBlur =
+            15;
+
+
+
+        ctx.fillStyle =
+            "#ff5500";
+
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            fire.x-camera.x,
+
+            fire.y,
+
+            fire.radius,
+
+            0,
+
+            Math.PI*2
+
+        );
+
+
+        ctx.fill();
+
+
+        ctx.shadowBlur=0;
+
+
+    }
 
 }
 
@@ -3113,6 +3680,9 @@ function drawCloud(
 
 function drawPlayer() {
 
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
     const x =
         player.x -
         camera.x +
@@ -3175,20 +3745,29 @@ function drawPlayer() {
 
    if (night || volcano) {
 
-
     ctx.shadowColor =
         volcano
         ? "#ff9900"
         : "#ffffff";
-
 
     ctx.shadowBlur =
         volcano
         ? 25
         : 18;
 
-
 }
+
+
+ctx.strokeStyle =
+night || volcano
+    ? "#ffffff"
+    : "#222222";
+
+
+ctx.fillStyle =
+night || volcano
+    ? "#ffffff"
+    : "#222222";
 
     if (volcano) {
 
@@ -3547,29 +4126,118 @@ else{
 
 function drawPlatforms() {
 
+    // 防止火山透明效果影响平台
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
+
     const night =
         currentLevel === 2;
+
+
+    const volcano =
+        currentLevel === 3;
+
 
 
     for (
         const platform of platforms
     ) {
 
+
         const x =
             platform.x -
             camera.x;
 
 
-        if (
+
+        if(
             x + platform.width < 0 ||
             x > canvas.width
-        ) {
+        ){
 
             continue;
+
         }
 
 
-        if (!night) {
+
+        // ==========================
+        // LEVEL 3 VOLCANO PLATFORM
+        // ==========================
+
+        if(volcano){
+
+
+            ctx.fillStyle =
+                "#3f3f46";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                platform.height
+            );
+
+
+            ctx.fillStyle =
+                "#ef4444";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                6
+            );
+
+
+        }
+
+
+
+        // ==========================
+        // LEVEL 2 NIGHT PLATFORM
+        // ==========================
+
+        else if(night){
+
+
+            ctx.fillStyle =
+                "#4338ca";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                platform.height
+            );
+
+
+            ctx.fillStyle =
+                "#a5b4fc";
+
+
+            ctx.fillRect(
+                x,
+                platform.y,
+                platform.width,
+                7
+            );
+
+
+        }
+
+
+
+        // ==========================
+        // LEVEL 1 DAY PLATFORM
+        // ==========================
+
+        else{
+
 
             ctx.fillStyle =
                 "#8b5a2b";
@@ -3594,34 +4262,17 @@ function drawPlatforms() {
                 9
             );
 
+
         }
 
-        else {
 
-            ctx.fillStyle =
-                "#4338ca";
-
-
-            ctx.fillRect(
-                x,
-                platform.y,
-                platform.width,
-                platform.height
-            );
-
-
-            ctx.fillStyle =
-                "#818cf8";
-
-
-            ctx.fillRect(
-                x,
-                platform.y,
-                platform.width,
-                7
-            );
-        }
     }
+
+
+    // 重置canvas状态
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
 }
 
 
@@ -3630,6 +4281,8 @@ function drawPlatforms() {
 // ======================================================
 
 function drawCoins() {
+
+    ctx.globalAlpha = 1;
 
     for (
         const coin of coins
@@ -3713,6 +4366,8 @@ function drawCoins() {
 // ======================================================
 
 function drawEnemies() {
+
+    ctx.globalAlpha = 1;
 
     for (
         const enemy of enemies
@@ -3921,11 +4576,33 @@ function drawFrame() {
 
     drawBackground();
 
+
+    // 强制恢复状态
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
+
     drawLava();
+
+
+    // 再恢复一次
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
 
     drawPlatforms();
 
-    drawJumpPads(); 
+
+    // 再恢复一次
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
+
+    drawJumpPads();
+
+    drawRocks();
+
+    drawFireballs();
 
     drawCoins();
 
@@ -3934,26 +4611,39 @@ function drawFrame() {
     drawGoal();
 
     drawPlayer();
+
+    ctx.globalAlpha = 1;
+
 }
+
+// ======================================================
+// ADVANCED VOLCANO LAVA
+// ======================================================
 
 function drawLava(){
 
-    if(!lava){
+    if(
+        currentLevel !== 3 ||
+        !lava
+    ){
+
         return;
+
     }
 
 
-    const lavaY = lava.y;
+    const surface = lava.y;
 
 
-    // ==============================
-    // DARK RED BASE
-    // ==============================
+
+    // ==================================================
+    // DEEP LAVA BACKGROUND
+    // ==================================================
 
     const gradient =
         ctx.createLinearGradient(
             0,
-            lavaY,
+            surface,
             0,
             canvas.height
         );
@@ -3961,74 +4651,141 @@ function drawLava(){
 
     gradient.addColorStop(
         0,
-        "#ff4500"
+        "#7f1d1d"
     );
 
 
     gradient.addColorStop(
         0.4,
-        "#d62800"
+        "#450a0a"
     );
 
 
     gradient.addColorStop(
         1,
-        "#4a0900"
+        "#090909"
     );
 
 
-    ctx.fillStyle =
-        gradient;
+    ctx.fillStyle = gradient;
 
 
     ctx.fillRect(
         0,
-        lavaY,
+        surface,
         canvas.width,
-        lava.height
+        canvas.height
     );
 
 
 
-    // ==============================
-    // MOVING LAVA WAVES
-    // ==============================
 
+
+    // ==================================================
+    // VOLCANIC ROCK SURFACE
+    // ==================================================
 
     ctx.fillStyle =
-        "#ffb000";
+        "#171717";
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        0,
+        surface
+    );
 
 
     for(
+        let x = 0;
+        x <= canvas.width;
+        x += 40
+    ){
+
+        let height =
+            Math.sin(
+                x * 0.05
+            ) * 8
+            +
+            Math.sin(
+                x * 0.13
+            ) * 5;
+
+
+        ctx.lineTo(
+            x,
+            surface + height
+        );
+
+    }
+
+
+    ctx.lineTo(
+        canvas.width,
+        surface + 40
+    );
+
+
+    ctx.lineTo(
+        0,
+        surface + 40
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+
+
+
+
+    // ==================================================
+    // BLACK ROCK PIECES
+    // ==================================================
+
+    for(
         let i = 0;
-        i < canvas.width + 100;
+        i < canvas.width;
         i += 80
     ){
 
-
-        const wave =
-            Math.sin(
-                gameTime * 0.08 +
-                i
-            ) * 8;
+        ctx.fillStyle =
+            "#262626";
 
 
         ctx.beginPath();
 
 
-        ctx.arc(
-
+        ctx.moveTo(
             i,
-
-            lavaY + wave,
-
-            35,
-
-            Math.PI,
-
-            Math.PI * 2
-
+            surface + 5
         );
+
+
+        ctx.lineTo(
+            i + 25,
+            surface - 12
+        );
+
+
+        ctx.lineTo(
+            i + 55,
+            surface + 5
+        );
+
+
+        ctx.lineTo(
+            i + 35,
+            surface + 25
+        );
+
+
+        ctx.closePath();
 
 
         ctx.fill();
@@ -4037,35 +4794,160 @@ function drawLava(){
 
 
 
-    // ==============================
-    // BUBBLES
-    // ==============================
 
 
-    ctx.fillStyle =
-        "#fff000";
+
+    // ==================================================
+    // GLOWING CRACKS
+    // ==================================================
+
+    ctx.shadowColor =
+        "#ff3300";
+
+
+    ctx.shadowBlur =
+        20;
 
 
     for(
-        let i = 0;
-        i < 20;
-        i++
+        let i = 50;
+        i < canvas.width;
+        i += 120
     ){
 
 
-        const x =
-            (i * 97) %
+        let pulse =
+            Math.sin(
+                gameTime * 0.08 + i
+            )
+            *
+            2;
+
+
+
+        // outer red glow
+
+        ctx.strokeStyle =
+            "#ff3300";
+
+
+        ctx.lineWidth =
+            7;
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(
+            i,
+            surface
+        );
+
+
+        ctx.lineTo(
+            i - 20,
+            surface + 20 + pulse
+        );
+
+
+        ctx.lineTo(
+            i + 10,
+            surface + 45
+        );
+
+
+        ctx.lineTo(
+            i - 5,
+            surface + 70
+        );
+
+
+        ctx.stroke();
+
+
+
+        // hot center
+
+        ctx.shadowBlur =
+            5;
+
+
+        ctx.strokeStyle =
+            "#ffc400";
+
+
+        ctx.lineWidth =
+            2;
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(
+            i,
+            surface + 2
+        );
+
+
+        ctx.lineTo(
+            i - 18,
+            surface + 22
+        );
+
+
+        ctx.lineTo(
+            i + 10,
+            surface + 45
+        );
+
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.shadowBlur = 0;
+
+
+
+
+
+
+
+    // ==================================================
+    // FLOATING EMBERS
+    // ==================================================
+
+    for(
+        let i = 0;
+        i < 25;
+        i++
+    ){
+
+        let x =
+            (
+                i * 73
+                -
+                camera.x * 0.3
+            )
+            %
             canvas.width;
 
 
-        const y =
-            lavaY +
-            30 +
+        let y =
+            surface -
             (
-                Math.sin(
-                    gameTime*0.05+i
-                )*20
-            );
+                gameTime * 0.8
+                +
+                i * 30
+            )
+            %
+            100;
+
+
+
+        ctx.fillStyle =
+            "#ff6600";
 
 
         ctx.beginPath();
@@ -4074,7 +4956,7 @@ function drawLava(){
         ctx.arc(
             x,
             y,
-            5 + (i%4),
+            2 + i%3,
             0,
             Math.PI*2
         );
@@ -4086,38 +4968,40 @@ function drawLava(){
 
 
 
-    // ==============================
-    // HEAT EFFECT
-    // ==============================
 
+
+
+    // ==================================================
+    // HEAT WAVE
+    // ==================================================
 
     ctx.fillStyle =
-        "rgba(255,100,0,0.25)";
+        "rgba(255,80,0,0.08)";
 
 
     for(
-        let i=0;
-        i<10;
-        i++
+        let x = 0;
+        x < canvas.width;
+        x += 30
     ){
+
+        let wave =
+            Math.sin(
+                gameTime*0.05+x
+            )
+            *
+            5;
+
 
         ctx.beginPath();
 
+
         ctx.arc(
-
-            i*120,
-
-            lavaY-20+
-            Math.sin(
-                gameTime*0.1+i
-            )*15,
-
-            20,
-
+            x,
+            surface-15+wave,
+            25,
             0,
-
             Math.PI*2
-
         );
 
 
@@ -4133,26 +5017,43 @@ function drawLava(){
 
 function drawJumpPads(){
 
+
+    // RESET CANVAS STATE
     ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
 
     for(
         const pad of jumpPads
     ){
 
+
         const x =
             pad.x - camera.x;
 
 
-       ctx.shadowColor =
+
+        // glow effect
+
+        ctx.save();
+
+
+        ctx.globalAlpha = 1;
+
+
+        ctx.shadowColor =
             "#22ff88";
 
 
         ctx.shadowBlur =
-            15;
+            18;
 
+
+
+        // main pad
 
         ctx.fillStyle =
-         "#22c55e";
+            "#22c55e";
 
 
         ctx.fillRect(
@@ -4163,10 +5064,14 @@ function drawJumpPads(){
         );
 
 
-        // top line
+
+        // top glowing line
+
+        ctx.shadowBlur = 5;
+
 
         ctx.fillStyle =
-            "#bbf7d0";
+            "#dcfce7";
 
 
         ctx.fillRect(
@@ -4177,9 +5082,16 @@ function drawJumpPads(){
         );
 
 
-        ctx.shadowBlur = 0;
+
+        ctx.restore();
 
     }
+
+
+
+    // reset again
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
 
 }
 
@@ -4188,6 +5100,7 @@ function drawJumpPads(){
 // ======================================================
 
 function gameLoop() {
+
 
     if (!gameRunning) {
 
@@ -4199,17 +5112,47 @@ function gameLoop() {
 
     if (!paused) {
 
+
         gameTime++;
+
+
+        // ==========================
+        // LEVEL 3 ONLY
+        // ==========================
+
+        if(currentLevel === 3){
+
+
+            if(Math.random() < 0.04){
+
+                createFireballs();
+
+            }
+
+
+            updateFireballs();
+
+
+            updateRocks();
+
+
+        }
+
+
+
+        updateMovingPlatforms();
 
 
         updatePlayer();
 
 
-        if (
+
+        if(
             !gameOver &&
             !levelComplete &&
             !adPlaying
-        ) {
+        ){
+
 
             updateEnemies();
 
@@ -4224,7 +5167,10 @@ function gameLoop() {
             updateCamera();
 
             updateUI();
+
+
         }
+
     }
 
 
@@ -4234,6 +5180,7 @@ function gameLoop() {
     requestAnimationFrame(
         gameLoop
     );
+
 }
 
 
@@ -4244,7 +5191,7 @@ function gameLoop() {
 function showLevelIntro(
     level,
     callback
-) {
+){
 
     const introScreen =
         document.getElementById(
@@ -4264,11 +5211,11 @@ function showLevelIntro(
         );
 
 
-    if (!introScreen) {
+    if(!introScreen){
 
         callback();
-
         return;
+
     }
 
 
@@ -4278,24 +5225,25 @@ function showLevelIntro(
 
     if(level === 1){
 
-    introSubtitle.textContent =
-    "READY?";
+        introSubtitle.textContent =
+            "READY?";
 
     }
 
     else if(level === 2){
 
-    introSubtitle.textContent =
-    "NIGHT RUN";
+        introSubtitle.textContent =
+            "NIGHT RUN";
 
     }
 
     else if(level === 3){
 
-    introSubtitle.textContent =
-    "VOLCANO ESCAPE";
+        introSubtitle.textContent =
+            "VOLCANO ESCAPE";
 
     }
+
 
 
     introScreen.classList.remove(
@@ -4303,19 +5251,26 @@ function showLevelIntro(
     );
 
 
+
     setTimeout(
-        function() {
+        function(){
+
 
             introScreen.classList.add(
                 "hidden"
             );
 
 
+            drawFrame();
+
+
             callback();
+
 
         },
         1800
     );
+
 }
 
 
